@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>图片延迟加载</title>
+    <style>
+      html,body{
+        width: 100%;
+        height: 100%;
+      }
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      ul,li{
+        list-style: none
+      }
+      .box{
+        height: 300%;
+        background-color: green;
+        position: relative;
+      }
+      .box img{
+        position: absolute;
+        bottom:100px;
+        width: 200px;
+        height: 200px;
+      }
+      .box img:nth-child(1){
+        left:200px;
+        top:400px;
+      }
+      .box img:nth-child(2){
+        top:800px;
+        left:400px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+
+
+    <div class='box'>
+          <img src="" alt="" temp='./lazy.jpg'>
+          <img src="" alt="" temp='./lazy.jpg'>
+          <img src="" alt="" temp='./lazy.jpg'>
+    </div>
+
+  </body>
+</html>
+<script>
+
+
+(function(){
+  var imgs = document.getElementsByTagName('img');
+  var html = document.documentElement;
+  var body = document.body;
+  lazy();
+  window.onmousewheel = lazy;
+  function lazy(){
+        imgs = Array.prototype.slice.call(imgs,0);
+        imgs.forEach(function(item,index){
+          if((imgs[index].offsetTop+imgs[index].offsetHeight)<((html.clientHeight||body.clientHeight)+(html.scrollTop||body.scrollTop))){
+              (function(i){
+                let tempSrc = imgs[i].getAttribute('temp');
+                  imgs[i].src = tempSrc;
+                  if(imgs[i].isload !== true){
+                    imgs[i].onload = function(){
+                      this.isload = true;
+                      this.temp = null;
+                    }
+                  }
+                })(index)
+              }
+            })
+
+         }
+  })()
+
+
+
+
+</script>
